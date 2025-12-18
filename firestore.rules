@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Check if user has specific role
+    function hasRole(role) {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || hasRole('admin'));
+      allow write: if hasRole('admin');
+    }
+
+    match /inventory/{itemId} {
+      allow read: if request.auth != null;
+      allow write: if hasRole('staff') || hasRole('admin');
+    }
+
+    // AUDIT LOGS: READ-ONLY for Admins. WRITE is BLOCKED for everyone (Backend bypasses this).
+    match /audit_logs/{logId} {
+      allow read: if hasRole('admin');
+      allow write: if false; 
+    }
+  }
+}
