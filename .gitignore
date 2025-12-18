@@ -27,3 +27,7 @@ __pycache__/
 *.pyc
 instance/
 .pytest_cache/
+
+# Security (DO NOT COMMIT THESE)
+serviceAccountKey.json
+backend/serviceAccountKey.json
