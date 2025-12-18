@@ -1,3 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* 1. Define Fonts */
+  --font-sans: "Montserrat", sans-serif;
+
+  /* 2. Define Colors */
+  --color-primary: #800000;       /* Maroon Red */
+  --color-primary-light: #A52A2A;
+  --color-primary-dark: #5C0000;
+  --color-secondary: #FFFFFF;
+  --color-gray-800: #2D2D2D;
+
+  /* 3. Enforce Sharp Corners (Override Defaults) */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  /* We keep 'full' default for circular avatars */
+}

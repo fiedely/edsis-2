@@ -4,8 +4,6 @@ function App() {
   const [backendData, setBackendData] = useState<string>('Loading...')
 
   useEffect(() => {
-    // Notice we just use '/api/health' - no domain, no localhost!
-    // This works in Dev AND Production.
     fetch('/api/health')
       .then((response) => response.json())
       .then((data) => {
@@ -18,15 +16,16 @@ function App() {
   }, [])
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-gray-100 gap-4">
-      <h1 className="text-4xl font-bold text-blue-600">
-        Frontend + Backend Test
+    <div className="flex h-screen w-full flex-col items-center justify-center bg-gray-50 gap-4 font-sans">
+      <h1 className="text-4xl font-bold text-primary">
+        Elementi Domus
       </h1>
-      <div className="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-        <p className="text-gray-500 text-sm uppercase font-semibold tracking-wider mb-2">
+      {/* This box should now have sharp corners (no rounded-xl) because we overrode it */}
+      <div className="p-6 bg-white border border-gray-200 shadow-lg">
+        <p className="text-gray-800 text-sm uppercase font-semibold tracking-wider mb-2">
           Backend Response:
         </p>
-        <p className="text-2xl font-medium text-gray-800">
+        <p className="text-2xl font-medium text-primary-dark">
           {backendData}
         </p>
       </div>
