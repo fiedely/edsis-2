@@ -7,10 +7,12 @@ import { AppLayout } from './layouts/AppLayout';
 
 // Pages
 import CatalogManagement from './pages/CatalogManagement';
+import AdminTools from './pages/AdminTools'; // NEW IMPORT
 
-// Placeholder Pages for now
+// Placeholders
 const CatalogPage = () => <div className="p-4">Catalog List (Coming Soon)</div>;
 const InventoryPage = () => <div className="p-4">Inventory List (Coming Soon)</div>;
+const UserAccessPage = () => <div className="p-4">User Access Management (Coming Soon)</div>;
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -36,8 +38,11 @@ function App() {
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/inventory" element={<InventoryPage />} />
           
-          {/* NEW ROUTE */}
           <Route path="/catalog-management" element={<CatalogManagement />} />
+          
+          {/* NEW ROUTES */}
+          <Route path="/admin-tools" element={<AdminTools />} />
+          <Route path="/user-access" element={<UserAccessPage />} />
         
         </Route>
       </Routes>
