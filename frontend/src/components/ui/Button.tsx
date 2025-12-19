@@ -5,13 +5,14 @@ import { cn } from "../../lib/utils"
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   variant?: 'primary' | 'outline' | 'ghost' | 'danger';
+  size?: 'default' | 'sm' | 'lg' | 'icon'; // NEW: Add size prop
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, children, isLoading, variant = 'primary', disabled, ...props }, ref) => {
+  ({ className, children, isLoading, variant = 'primary', size = 'default', disabled, ...props }, ref) => {
     
-    // FIX: Added 'h-10 px-4 py-2' to ensure all buttons have a standard size
-    const baseStyles = "inline-flex h-10 px-4 py-2 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]";
+    // Base styles (removed fixed height/padding from here)
+    const baseStyles = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]";
     
     const variants = {
       primary: "bg-primary text-white shadow hover:bg-primary-dark",
@@ -20,11 +21,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       danger: "bg-red-500 text-white shadow hover:bg-red-600",
     };
 
+    // NEW: Define sizes
+    const sizes = {
+      default: "h-10 px-4 py-2",
+      sm: "h-8 rounded-md px-3 text-xs",
+      lg: "h-11 rounded-md px-8",
+      icon: "h-8 w-8", // Perfect for the plus button
+    };
+
     return (
       <button
         ref={ref}
         disabled={isLoading || disabled}
-        className={cn(baseStyles, variants[variant], className)}
+        // Merge variant AND size classes
+        className={cn(baseStyles, variants[variant], sizes[size], className)}
         {...props}
       >
         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
