@@ -4,13 +4,13 @@ import { auth } from './firebase';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthOverlay from './components/AuthOverlay';
 import { AppLayout } from './layouts/AppLayout';
+import CatalogPage from './pages/CatalogPage';
 
 // Pages
 import CatalogManagement from './pages/CatalogManagement';
 import AdminTools from './pages/AdminTools'; // NEW IMPORT
 
 // Placeholders
-const CatalogPage = () => <div className="p-4">Catalog List (Coming Soon)</div>;
 const InventoryPage = () => <div className="p-4">Inventory List (Coming Soon)</div>;
 const UserAccessPage = () => <div className="p-4">User Access Management (Coming Soon)</div>;
 

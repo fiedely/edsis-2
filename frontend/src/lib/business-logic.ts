@@ -3,26 +3,24 @@ import type { Product, Discount } from '../types/inventory';
 
 /**
  * SKU GENERATOR
- * Format: BRAND(4)-COLL(4)-CATE(4)-PROD(4)-RAND(3)
- * We add a random 3-digit suffix to ensure non-duplicate proofing 
- * without needing a DB round-trip for every keystroke.
+ * Format: BRAND(4)-COLL(4)-CATE(4)-PROD(4)
+ * Example: BLUE-AMBR-TABL-AMBR
  */
 export function generateSku(
-  brand: string, 
-  collection: string, 
-  category: string, 
-  productName: string
-): string {
-  const clean = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    brand: string, 
+    collection: string, 
+    category: string, 
+    productName: string
+  ): string {
+    const clean = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    
+    const p1 = clean(brand).padEnd(4, 'X').slice(0, 4);
+    const p2 = clean(collection).padEnd(4, 'X').slice(0, 4);
+    const p3 = clean(category).padEnd(4, 'X').slice(0, 4);
+    const p4 = clean(productName).padEnd(4, 'X').slice(0, 4);
   
-  const p1 = clean(brand).padEnd(4, 'X').slice(0, 4);
-  const p2 = clean(collection).padEnd(4, 'X').slice(0, 4);
-  const p3 = clean(category).padEnd(4, 'X').slice(0, 4);
-  const p4 = clean(productName).padEnd(4, 'X').slice(0, 4);
-  const suffix = Math.floor(Math.random() * 900 + 100).toString(); // 100-999
-
-  return `${p1}-${p2}-${p3}-${p4}-${suffix}`;
-}
+    return `${p1}-${p2}-${p3}-${p4}`;
+  }
 
 /**
  * CURRENCY CONVERTER

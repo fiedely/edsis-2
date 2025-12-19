@@ -10,7 +10,6 @@ export function AppLayout() {
   const [activeView, setActiveView] = useState('1'); 
 
   return (
-    // FIX 1: Use 'h-[100dvh]' instead of 'h-screen' to fix mobile browser URL bar issues
     <div className="flex flex-col h-[dvh] w-full bg-gray-50 text-gray-900 font-sans">
       
       {/* 1. TOP BAR */}
@@ -30,26 +29,21 @@ export function AppLayout() {
       {/* 2. MAIN WORKSPACE */}
       <div className="flex flex-1 overflow-hidden relative">
         
-        {/* A. THIN SIDEBAR (Hidden on mobile, visible on desktop) */}
-        <aside className="shrink-0 h-full z-20 hidden md:block border-r border-gray-200 bg-white">
+        {/* A. THIN SIDEBAR (NOW ALWAYS VISIBLE) */}
+        {/* Removed 'hidden md:block' */}
+        <aside className="shrink-0 h-full z-20 border-r border-gray-200 bg-white">
           <ViewSwitcher activeViewId={activeView} onSelectView={setActiveView} />
         </aside>
 
         {/* B. CONTENT AREA */}
-        {/* FIX 2: Changed 'overflow-hidden' to 'overflow-y-auto' so you can SCROLL */}
-        {/* FIX 3: Added 'pb-24' (padding bottom) so the Bottom Nav doesn't hide content */}
         <main className="flex-1 relative overflow-y-auto w-full pb-24 scroll-smooth">
           <Outlet context={{ activeView }} /> 
         </main>
 
       </div>
 
-      {/* 3. BOTTOM NAV */}
       <BottomNav />
-
-      {/* 4. SIDE MENU */}
       <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />
-
     </div>
   );
 }
