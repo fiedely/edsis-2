@@ -3,7 +3,10 @@ import {
   Plus, RefreshCw, ChevronDown, ChevronRight 
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-// Removed unused Input import
+// NEW IMPORTS
+import { Card } from '../components/ui/Card';
+import { Badge } from '../components/ui/Badge';
+
 import { 
   getBrands, addBrand, addCollectionToBrand, getCategories, addCategory 
 } from '../services/masterData';
@@ -33,7 +36,6 @@ const INITIAL_DATA = {
 export default function CatalogManagement() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  // Removed unused 'loading' state
   const [seeding, setSeeding] = useState(false);
   const [status, setStatus] = useState('');
   
@@ -60,13 +62,11 @@ export default function CatalogManagement() {
     setStatus('Starting population...');
     
     try {
-      // 1. Categories
       setStatus(`Adding ${INITIAL_DATA.categories.length} Categories...`);
       for (const cat of INITIAL_DATA.categories) {
         await addCategory(cat);
       }
 
-      // 2. Brands & Collections
       setStatus(`Adding ${INITIAL_DATA.brands.length} Brands...`);
       for (const brandData of INITIAL_DATA.brands) {
         await addBrand(brandData.name);
@@ -112,13 +112,13 @@ export default function CatalogManagement() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="h4">Categories ({categories.length})</h3>
-            {/* FIX: Used size="icon" */}
             <Button size="icon" variant="ghost">
               <Plus className="w-5 h-5" />
             </Button>
           </div>
           
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+          {/* REFACTOR: Using Card */}
+          <Card className="overflow-hidden">
             {categories.length === 0 ? (
               <div className="p-8 text-center muted">No categories found. Click Populate.</div>
             ) : (
@@ -130,14 +130,13 @@ export default function CatalogManagement() {
                 ))}
               </div>
             )}
-          </div>
+          </Card>
         </div>
 
         {/* BRANDS */}
         <div className="space-y-4">
            <div className="flex items-center justify-between">
             <h3 className="h4">Brands ({brands.length})</h3>
-            {/* FIX: Used size="icon" */}
             <Button size="icon" variant="ghost">
               <Plus className="w-5 h-5" />
             </Button>
@@ -148,7 +147,8 @@ export default function CatalogManagement() {
               <div className="p-8 text-center muted bg-white border rounded-lg">No brands found. Click Populate.</div>
             ) : (
               brands.map((brand) => (
-                <div key={brand.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm transition-all">
+                /* REFACTOR: Using Card */
+                <Card key={brand.id} className="overflow-hidden transition-all">
                   
                   <button 
                     onClick={() => setExpandedBrand(expandedBrand === brand.id ? null : brand.id)}
@@ -162,18 +162,19 @@ export default function CatalogManagement() {
                   </button>
 
                   {expandedBrand === brand.id && (
-                    <div className="bg-gray-50 border-t border-gray-100 p-4 grid grid-cols-2 gap-2">
+                    <div className="bg-gray-50 border-t border-gray-100 p-4 flex flex-wrap gap-2">
                       {brand.collections.map((col, idx) => (
-                        <div key={idx} className="bg-white px-3 py-1.5 rounded border border-gray-200 text-xs text-gray-600 truncate">
+                        /* REFACTOR: Using Badge */
+                        <Badge key={idx} variant="outline" className="bg-white">
                           {col}
-                        </div>
+                        </Badge>
                       ))}
-                      <button className="flex items-center justify-center gap-1 px-3 py-1.5 rounded border border-dashed border-gray-300 text-xs text-primary hover:bg-primary hover:text-white transition-colors">
-                        <Plus className="w-3 h-3" /> Add Coll.
-                      </button>
+                      <Badge variant="outline" className="border-dashed cursor-pointer hover:border-primary hover:text-primary">
+                        <Plus className="w-3 h-3 mr-1" /> Add
+                      </Badge>
                     </div>
                   )}
-                </div>
+                </Card>
               ))
             )}
           </div>
