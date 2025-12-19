@@ -1,4 +1,3 @@
-// FIX: Added 'type' keyword for strict import
 import type { Product, Discount } from '../types/inventory';
 
 /**
@@ -7,25 +6,21 @@ import type { Product, Discount } from '../types/inventory';
  * Example: BLUE-AMBR-TABL-AMBR
  */
 export function generateSku(
-    brand: string, 
-    collection: string, 
-    category: string, 
-    productName: string
-  ): string {
-    const clean = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-    
-    const p1 = clean(brand).padEnd(4, 'X').slice(0, 4);
-    const p2 = clean(collection).padEnd(4, 'X').slice(0, 4);
-    const p3 = clean(category).padEnd(4, 'X').slice(0, 4);
-    const p4 = clean(productName).padEnd(4, 'X').slice(0, 4);
+  brand: string, 
+  collection: string, 
+  category: string, 
+  productName: string
+): string {
+  const clean = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
   
-    return `${p1}-${p2}-${p3}-${p4}`;
-  }
+  const p1 = clean(brand).padEnd(4, 'X').slice(0, 4);
+  const p2 = clean(collection).padEnd(4, 'X').slice(0, 4);
+  const p3 = clean(category).padEnd(4, 'X').slice(0, 4);
+  const p4 = clean(productName).padEnd(4, 'X').slice(0, 4);
 
-/**
- * CURRENCY CONVERTER
- * Priority: EUR -> USD -> IDR
- */
+  return `${p1}-${p2}-${p3}-${p4}`;
+}
+
 export function calculateBaseIdr(
   product: Partial<Product>, 
   rates: { eur: number; usd: number }
@@ -39,36 +34,21 @@ export function calculateBaseIdr(
   return product.priceIdr || 0;
 }
 
-/**
- * DISCOUNT CALCULATOR (Compound)
- * Logic: Price * (1 - d1) * (1 - d2) ...
- * This differentiates 20%+20% (64% remaining) from 40% (60% remaining).
- */
 export function calculateNettPrice(baseIdr: number, discounts: Discount[]): number {
   let multiplier = 1;
-  
-  // Filter active/valid discounts only
   const now = new Date();
   const validDiscounts = discounts.filter(d => 
     d.isActive && 
     d.startDate.toDate() <= now && 
     d.endDate.toDate() >= now
   );
-
   validDiscounts.forEach(d => {
-    // Convert 20 to 0.2
     const decimal = d.value / 100;
-    // Compound: multiply by (1 - 0.2)
     multiplier = multiplier * (1 - decimal);
   });
-
   return Math.round(baseIdr * multiplier);
 }
 
-/**
- * SEARCH INDEXER
- * Creates the "Super Smart Search" string array
- */
 export function generateSearchKeywords(product: Product): string[] {
   const combined = [
     product.brand,
@@ -80,6 +60,5 @@ export function generateSearchKeywords(product: Product): string[] {
     product.location
   ].join(' ').toLowerCase();
 
-  // Split by space and remove duplicates
   return [...new Set(combined.split(' '))].filter(k => k.length > 1);
 }

@@ -1,18 +1,25 @@
 import { 
-    collection, doc, getDocs, setDoc, query, orderBy 
+    collection, doc, getDocs, setDoc 
   } from 'firebase/firestore';
   import { db } from '../firebase';
   import type { Product } from '../types/inventory';
   
   export const getProducts = async (): Promise<Product[]> => {
-    // Fetch all products, sorted by created date (newest first)
-    const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
-    const snap = await getDocs(q);
-    return snap.docs.map(d => d.data() as Product);
+    try {
+      // FIX: Removed 'orderBy' to ensure we get ALL documents regardless of index status
+      const colRef = collection(db, 'products');
+      const snap = await getDocs(colRef);
+      
+      console.log(`[getProducts] Fetched ${snap.size} items`); // Debug Log
+      
+      return snap.docs.map(d => d.data() as Product);
+    } catch (error) {
+      console.error("[getProducts] Error:", error);
+      throw error;
+    }
   };
   
   export const addProduct = async (product: Product) => {
-    // We use the Product ID as the document ID for easy reference
     const ref = doc(db, 'products', product.id);
     await setDoc(ref, product);
   };

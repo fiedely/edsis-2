@@ -1,4 +1,5 @@
 import { X, ImageOff, Tag, Ruler, Info, Factory, Palette } from 'lucide-react';
+import { Button } from '../ui/Button';
 import { ProductStatusBadge } from './ProductStatusBadge';
 import type { Product } from '../../types/inventory';
 
@@ -19,7 +20,7 @@ export function ProductDetail({ product, isOpen, onClose }: ProductDetailProps) 
 
   return (
     <>
-      {/* 1. FULL SCREEN CONTAINER (z-50 covers everything) */}
+      {/* FULL SCREEN CONTAINER (z-50 covers everything) */}
       <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in slide-in-from-bottom-5 duration-200">
         
         {/* Header Image Area */}
@@ -71,6 +72,7 @@ export function ProductDetail({ product, isOpen, onClose }: ProductDetailProps) 
               <div className="text-2xl font-bold text-primary">{formattedPrice}</div>
             </div>
             <div className="text-right">
+              {/* Refinement: Renamed 'Stock Level' to 'Stocks' */}
               <div className="text-xs text-gray-500 uppercase font-semibold mb-1">Stocks</div>
               <div className="flex items-center gap-4">
                  <div className="text-center">
@@ -109,6 +111,7 @@ export function ProductDetail({ product, isOpen, onClose }: ProductDetailProps) 
               <p className="text-base text-gray-900">{product.dimensions || 'N/A'}</p>
             </div>
 
+            {/* Refinement: Separated Finishing and Detail */}
             <div className="space-y-1.5 col-span-2">
               <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase">
                 <Palette className="w-3 h-3" /> Finishing
@@ -130,6 +133,11 @@ export function ProductDetail({ product, isOpen, onClose }: ProductDetailProps) 
             )}
           </div>
 
+        </div>
+        
+        {/* Close Button Footer */}
+        <div className="p-4 border-t border-gray-100 bg-gray-50/50 flex gap-3">
+          <Button variant="outline" className="flex-1" onClick={onClose}>Close</Button>
         </div>
       </div>
     </>

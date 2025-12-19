@@ -8,12 +8,11 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { ProductDetail } from '../components/catalog/ProductDetail';
-import { ProductStatusBadge } from '../components/catalog/ProductStatusBadge'; // New Import
+import { ProductStatusBadge } from '../components/catalog/ProductStatusBadge';
 import { useCatalog, type CatalogGroup, type SortOption } from '../hooks/useCatalog';
 import type { Product } from '../types/inventory';
 import { cn } from '../lib/utils';
 
-// --- SUB-COMPONENT: RECURSIVE GROUP RENDERER ---
 const GroupItem = ({ 
   group, 
   forceExpand, 
@@ -76,7 +75,6 @@ const GroupItem = ({
                 </div>
               </div>
 
-              {/* Price & Status */}
               <div className="text-right shrink-0">
                 <div className="text-sm font-bold text-gray-900">
                   {new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(product.priceIdr || 0)}
@@ -115,7 +113,6 @@ export default function CatalogPage() {
           />
           <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
           
-          {/* FIX: Clear Button */}
           {searchQuery && (
             <button 
               onClick={() => setSearchQuery('')}

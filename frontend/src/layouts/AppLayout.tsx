@@ -29,8 +29,7 @@ export function AppLayout() {
       {/* 2. MAIN WORKSPACE */}
       <div className="flex flex-1 overflow-hidden relative">
         
-        {/* A. THIN SIDEBAR (NOW ALWAYS VISIBLE) */}
-        {/* Removed 'hidden md:block' */}
+        {/* A. THIN SIDEBAR (Always Visible now) */}
         <aside className="shrink-0 h-full z-20 border-r border-gray-200 bg-white">
           <ViewSwitcher activeViewId={activeView} onSelectView={setActiveView} />
         </aside>

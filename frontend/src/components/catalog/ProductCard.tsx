@@ -1,6 +1,6 @@
 import { ImageOff } from 'lucide-react';
 import { Card } from '../ui/Card';
-import { ProductStatusBadge } from './ProductStatusBadge'; // New Import
+import { ProductStatusBadge } from './ProductStatusBadge';
 import type { Product } from '../../types/inventory';
 import { cn } from '../../lib/utils';
 
