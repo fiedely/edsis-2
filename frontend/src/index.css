@@ -18,5 +18,33 @@
   --radius-lg: 0;
   --radius-xl: 0;
   --radius-2xl: 0;
-  /* We keep 'full' default for circular avatars */
+}
+
+/* DESIGN SYSTEM: TYPOGRAPHY 
+  We add these using @layer components so they can be overridden if needed.
+*/
+@layer components {
+  .h1 {
+    @apply text-4xl font-bold tracking-tight text-primary;
+  }
+  
+  .h2 {
+    @apply text-3xl font-semibold tracking-tight text-gray-800;
+  }
+  
+  .h3 {
+    @apply text-2xl font-semibold tracking-tight text-gray-800;
+  }
+
+  .label-text {
+    @apply text-sm font-medium text-gray-700 block mb-1;
+  }
+  
+  .muted {
+    @apply text-xs text-gray-500;
+  }
+  
+  .link {
+    @apply text-primary font-semibold hover:underline cursor-pointer;
+  }
 }
