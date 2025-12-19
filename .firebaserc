@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "edsis-production"  // REPLACE with your actual project ID from Phase 1
+    "default": "edsis-2"
   }
 }

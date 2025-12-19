@@ -1,15 +1,25 @@
+// Force re-deploy
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Check if user has specific role
+    
+    // Helper: Check if user has specific role
     function hasRole(role) {
       return request.auth != null && 
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
     }
 
     match /users/{userId} {
+      // Allow users to read their own profile, Admins can read all
       allow read: if request.auth != null && (request.auth.uid == userId || hasRole('admin'));
-      allow write: if hasRole('admin');
+      
+      // FIX: Allow users to create their own profile ONLY if they set role to 'viewer'
+      allow create: if request.auth.uid == userId && request.resource.data.role == 'viewer';
+      
+      // FIX: Allow users to update their own 'lastLogin' (but prevent changing their role)
+      allow update: if request.auth.uid == userId 
+                    && request.resource.data.role == resource.data.role 
+                    || hasRole('admin');
     }
 
     match /inventory/{itemId} {
@@ -17,10 +27,9 @@ service cloud.firestore {
       allow write: if hasRole('staff') || hasRole('admin');
     }
 
-    // AUDIT LOGS: READ-ONLY for Admins. WRITE is BLOCKED for everyone (Backend bypasses this).
     match /audit_logs/{logId} {
       allow read: if hasRole('admin');
-      allow write: if false; 
+      allow write: if false; // Only Backend can write here
     }
   }
 }
