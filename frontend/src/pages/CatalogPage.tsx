@@ -13,6 +13,7 @@ import { useCatalog, type CatalogGroup, type SortOption } from '../hooks/useCata
 import type { Product } from '../types/inventory';
 import { cn } from '../lib/utils';
 
+// --- GROUP ITEM COMPONENT ---
 const GroupItem = ({ 
   group, 
   forceExpand, 
@@ -33,17 +34,25 @@ const GroupItem = ({
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors select-none",
+          "flex items-center justify-between p-4 cursor-pointer hover:bg-primary/5 transition-colors select-none group",
           group.level === 0 ? "bg-white" : "bg-gray-50/50"
         )}
         style={{ paddingLeft: `${group.level * 16 + 16}px` }}
       >
         <div className="flex items-center gap-3">
-          {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
-          <span className={cn("font-medium text-gray-900", group.level === 0 ? "text-base" : "text-sm")}>
+          {isExpanded ? (
+            <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+          )}
+          
+          <span className={cn(
+            "font-medium text-gray-900 group-hover:text-primary transition-colors", 
+            group.level === 0 ? "text-base" : "text-sm"
+          )}>
             {group.key}
           </span>
-          <Badge variant="secondary" className="text-[10px] h-5 px-1.5 text-gray-500 bg-gray-100">
+          <Badge variant="secondary" className="text-[10px] h-5 px-1.5 text-gray-500 bg-gray-100 group-hover:bg-primary/10 group-hover:text-primary">
             {group.count}
           </Badge>
         </div>
@@ -62,12 +71,12 @@ const GroupItem = ({
               className="flex items-center gap-3 p-3 hover:bg-primary/5 cursor-pointer border-t border-gray-50 transition-colors group relative"
               style={{ paddingLeft: `${(group.level + 1) * 16 + 16}px` }}
             >
-              <div className="w-10 h-10 bg-gray-200 rounded overflow-hidden shrink-0">
+              <div className="w-10 h-10 bg-gray-200 rounded overflow-hidden shrink-0 border border-gray-100 group-hover:border-primary/20">
                 {product.imageUrl && <img src={product.imageUrl} className="w-full h-full object-cover" />}
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-900 truncate group-hover:text-primary">
+                <div className="text-sm font-medium text-gray-900 truncate group-hover:text-primary transition-colors">
                   {product.productName}
                 </div>
                 <div className="text-xs text-gray-500 truncate">
@@ -76,7 +85,7 @@ const GroupItem = ({
               </div>
 
               <div className="text-right shrink-0">
-                <div className="text-sm font-bold text-gray-900">
+                <div className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors">
                   {new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(product.priceIdr || 0)}
                 </div>
                 <div className="flex justify-end mt-1">
@@ -94,8 +103,17 @@ const GroupItem = ({
 export default function CatalogPage() {
   const { activeView } = useOutletContext<{ activeView: string }>();
   const { searchQuery, setSearchQuery, groupedCatalog, sortOption, setSortOption, totalCount, loading } = useCatalog(activeView);
+  
   const [expandAll, setExpandAll] = useState(false);
+  const [resetKey, setResetKey] = useState(0); 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleExpandAll = () => setExpandAll(true);
+  
+  const handleCollapseAll = () => {
+    setExpandAll(false);
+    setResetKey(prev => prev + 1);
+  };
 
   if (loading) return <div className="p-8 text-center text-gray-500">Loading catalog...</div>;
 
@@ -103,11 +121,10 @@ export default function CatalogPage() {
     <div className="h-full flex flex-col bg-white">
       <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3 space-y-3 shadow-sm">
         
-        {/* Search Bar with Clear Button */}
         <div className="relative">
           <Input 
-            placeholder="Search (e.g. 'gullo blue sofa')..." 
-            className="pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white transition-all"
+            placeholder="Search..." 
+            className="pl-10 pr-10 bg-gray-50 border-gray-200 focus:bg-white transition-all focus:border-primary/50 focus:ring-primary/20"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -116,20 +133,20 @@ export default function CatalogPage() {
           {searchQuery && (
             <button 
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-2.5 text-gray-400 hover:text-primary p-1 hover:bg-primary/5 rounded-full transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 h-3" />
             </button>
           )}
         </div>
 
         <div className="flex items-center justify-between">
           <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            {totalCount} Items Found
+            {totalCount} Items
           </div>
           <div className="flex items-center gap-2">
             <select 
-              className="bg-gray-50 border border-gray-200 text-xs rounded-md px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer"
+              className="bg-gray-50 border border-gray-200 text-xs rounded-md px-2 py-1.5 focus:outline-none focus:border-primary cursor-pointer hover:border-primary/50 transition-colors"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value as SortOption)}
             >
@@ -138,14 +155,26 @@ export default function CatalogPage() {
               <option value="price_asc">Lowest Price</option>
               <option value="price_desc">Highest Price</option>
             </select>
-            <Button 
-              size="sm" 
-              variant="ghost" 
-              onClick={() => setExpandAll(!expandAll)}
-              className="h-8 px-2 text-gray-500 hover:text-primary"
-            >
-              {expandAll ? <ChevronsUp className="w-4 h-4" /> : <ChevronsDown className="w-4 h-4" />}
-            </Button>
+            
+            <div className="flex bg-gray-50 rounded-md border border-gray-200 p-0.5">
+              {/* FIX: Removed conditional logic. Both buttons are now simple ghost buttons. */}
+              <Button 
+                size="icon-sm" 
+                variant="ghost" 
+                onClick={handleExpandAll}
+                title="Expand All"
+              >
+                <ChevronsDown className="w-4 h-4" />
+              </Button>
+              <Button 
+                size="icon-sm" 
+                variant="ghost" 
+                onClick={handleCollapseAll}
+                title="Collapse All"
+              >
+                <ChevronsUp className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -157,14 +186,16 @@ export default function CatalogPage() {
             <p>No products found</p>
           </div>
         ) : (
-          groupedCatalog.map(group => (
-            <GroupItem 
-              key={group.key} 
-              group={group} 
-              forceExpand={expandAll || !!searchQuery}
-              onProductClick={setSelectedProduct}
-            />
-          ))
+          <div key={resetKey}>
+            {groupedCatalog.map(group => (
+              <GroupItem 
+                key={group.key} 
+                group={group} 
+                forceExpand={expandAll || !!searchQuery}
+                onProductClick={setSelectedProduct}
+              />
+            ))}
+          </div>
         )}
       </div>
 

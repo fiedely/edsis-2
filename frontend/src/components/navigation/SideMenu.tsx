@@ -32,14 +32,20 @@ export function SideMenu({ isOpen, onClose }: SideMenuProps) {
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         
+        {/* Refinement 6: Updated Title & Subtitle Structure */}
         <div className="p-6 bg-primary text-white relative">
           <button onClick={onClose} className="absolute top-4 right-4 text-white/80 hover:text-white">
             <X className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold tracking-tight">EDSIS</h2>
-          <p className="text-xs text-primary-100 uppercase tracking-widest opacity-80 mt-1">
-            Elementi Domus
-          </p>
+          
+          <div className="mt-2">
+            <h2 className="text-xl font-bold tracking-tight leading-none">
+              Elementi Domus
+            </h2>
+            <p className="text-xs text-primary-100 font-medium opacity-80 mt-1 uppercase tracking-wide">
+              Smart Inventory System
+            </p>
+          </div>
         </div>
 
         <div className="flex-1 py-6 overflow-y-auto space-y-6">
@@ -63,7 +69,7 @@ export function SideMenu({ isOpen, onClose }: SideMenuProps) {
             </nav>
           </div>
 
-          {/* GROUP 2: ADMIN (Only if Access Allows - For now we show all) */}
+          {/* GROUP 2: ADMIN */}
           <div>
             <div className="px-6 mb-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
               System Admin

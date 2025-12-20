@@ -125,7 +125,7 @@ export default function AdminTools() {
             priceIdr: Number(row['retail price (eur)']) * RATE_EUR_IDR,
             
             discountIds: [],
-            imageUrl: row['image file'] || '',
+            imageUrl: row['image file'] ? `https://firebasestorage.googleapis.com/v0/b/edsis-2.firebasestorage.app/o/products%2F${row['image file']}?alt=media` : '',
             searchKeywords: [],
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now()

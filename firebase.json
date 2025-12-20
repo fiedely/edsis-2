@@ -28,5 +28,8 @@
       "database": "edsis-2-database",
       "rules": "firestore.rules",
       "indexes": "firestore.indexes.json"
+    },
+    "storage": {
+      "rules": "storage.rules"
     }
   }
